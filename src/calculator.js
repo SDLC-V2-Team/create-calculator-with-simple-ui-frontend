@@ -76,6 +76,7 @@ export function reduce(state, action) {
     case 'percent':
       next.current = formatResult(parseFloat(next.current) / 100);
       return next;
+    // FR-001/FR-002: trig operations dispatch to the shared unary handler.
     case 'sin':
       return inputUnary(next, Math.sin);
     case 'cos':
