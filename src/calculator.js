@@ -76,9 +76,31 @@ export function reduce(state, action) {
     case 'percent':
       next.current = formatResult(parseFloat(next.current) / 100);
       return next;
+    case 'sin':
+      return inputUnary(next, Math.sin);
+    case 'cos':
+      return inputUnary(next, Math.cos);
     default:
       return next;
   }
+}
+
+/**
+ * Applies a unary math function (e.g. Math.sin, Math.cos) to the current value.
+ * Input is interpreted in radians, consistent with native JS Math behaviour.
+ * @param {object} state - current calculator state
+ * @param {function(number): number} fn - the unary function to apply
+ * @returns {object} the mutated state
+ */
+function inputUnary(state, fn) {
+  const value = parseFloat(state.current);
+  if (isNaN(value)) {
+    state.current = 'Error';
+  } else {
+    state.current = formatResult(fn(value));
+  }
+  state.overwrite = true;
+  return state;
 }
 
 function inputDigit(state, digit) {
